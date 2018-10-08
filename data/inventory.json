@@ -1,0 +1,12 @@
+[
+    {
+        "productId": 1,
+        "quantity": 5,
+        "transType": "ADD"
+    },
+    {
+        "productId": 2,
+        "quantity": 10,
+        "transType": "SUB"
+    }
+]
