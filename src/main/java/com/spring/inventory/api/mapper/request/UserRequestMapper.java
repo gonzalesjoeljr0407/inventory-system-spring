@@ -1,5 +1,6 @@
 package com.spring.inventory.api.mapper.request;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.spring.inventory.api.model.Owner;
@@ -13,7 +14,7 @@ public class UserRequestMapper {
         User user = new User();
         if(null != userRequest) {
             user.setUsername(userRequest.getUsername());
-            user.setPassword(userRequest.getPassword());
+            user.setPassword(encryptPassword(userRequest.getPassword()));
             
             Owner owner = new Owner();
             owner.setId(userRequest.getOwnerId());
@@ -23,5 +24,10 @@ public class UserRequestMapper {
         }
         
         return null;
+    }
+    
+    private String encryptPassword(String password) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return passwordEncoder.encode(password);
     }
 }

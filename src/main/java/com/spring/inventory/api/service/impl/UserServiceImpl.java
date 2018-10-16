@@ -13,6 +13,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.spring.inventory.api.exception.response.BusinessException;
@@ -81,18 +82,20 @@ public class UserServiceImpl implements UserDetailsService, UserService{
         throw new DataException(null, "Incorrect username/password.", null);
     }
     
-    private Collection<SimpleGrantedAuthority> getAuthorization(String auth) {
-        return Arrays.asList(new SimpleGrantedAuthority(auth));
-    }
-    
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        System.out.println("username: " + username);
         User user = userRepository.getByUsername(username);
         if (user == null){
+            System.out.println("user null");
             throw new UsernameNotFoundException("Invalid username or password.");
         }
         return new org.springframework.security.core.userdetails.User(user.getUsername(),
                 user.getPassword(),
                 getAuthorization("ADMIN"));
+    }
+    
+    private Collection<SimpleGrantedAuthority> getAuthorization(String auth) {
+        return Arrays.asList(new SimpleGrantedAuthority(auth));
     }
 }
